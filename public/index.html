@@ -24,16 +24,17 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opac
 @keyframes drift{to{transform:translate(40px,25px);}}
 .z{position:relative;z-index:1;}
 nav{background:rgba(8,8,13,.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--ghost);padding:0 20px;position:sticky;top:0;z-index:200;}
-.nav-i{max-width:880px;margin:0 auto;height:52px;display:flex;align-items:center;justify-content:space-between;}
-.logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.1em;display:flex;align-items:center;gap:10px;}
+.nav-i{max-width:880px;margin:0 auto;height:52px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.1em;display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .logo-dot{width:8px;height:8px;background:var(--lime);border-radius:50%;box-shadow:0 0 10px var(--lime);animation:pp 2.5s ease-in-out infinite;}
 @keyframes pp{0%,100%{opacity:1;}50%{opacity:.3;}}
 .logo span{color:var(--lime);}
+.nav-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
 .nav-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;padding:4px 10px;border:1px solid var(--mist);border-radius:20px;color:var(--fog);text-transform:uppercase;}
-.nav-user{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--lime-d);display:none;align-items:center;gap:8px;}
-.nav-user.show{display:flex;}
-.logout-btn{background:none;border:1px solid var(--mist);border-radius:4px;padding:3px 8px;color:var(--fog);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;cursor:pointer;transition:all .2s;text-transform:uppercase;}
-.logout-btn:hover{border-color:var(--fog);color:var(--text);}
+.nav-code{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--lime-d);}
+.nav-shop{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;color:#96CC00;padding:4px 10px;border:1px solid rgba(197,255,0,.2);border-radius:20px;}
+.nav-btn{background:none;border:1px solid var(--mist);border-radius:4px;padding:3px 8px;color:var(--fog);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;cursor:pointer;transition:all .2s;text-transform:uppercase;}
+.nav-btn:hover{border-color:var(--fog);color:var(--text);}
 
 /* GATE */
 .gate{min-height:90vh;display:flex;align-items:center;justify-content:center;padding:20px;}
@@ -48,24 +49,38 @@ nav{background:rgba(8,8,13,.88);backdrop-filter:blur(24px);border-bottom:1px sol
 .code-in{flex:1;background:var(--ink3);border:1px solid var(--ink5);border-radius:var(--r);padding:13px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.12em;outline:none;transition:border-color .2s;text-transform:uppercase;}
 .code-in:focus{border-color:rgba(197,255,0,.4);}
 .code-in::placeholder{color:var(--mist);text-transform:none;}
-.code-go{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.1em;padding:13px 20px;background:var(--lime);color:var(--ink);border:none;border-radius:var(--r);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.code-go{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.1em;padding:13px 20px;background:var(--lime);color:var(--ink);border:none;border-radius:var(--r);cursor:pointer;transition:all .2s;}
 .code-go:hover{background:#D6FF00;}
 .code-go:disabled{opacity:.4;cursor:not-allowed;}
 .code-err{font-family:'DM Mono',monospace;font-size:10px;color:#FF3366;letter-spacing:.06em;min-height:16px;margin-bottom:4px;}
 .gate-footer{margin-top:22px;padding-top:18px;border-top:1px solid var(--ghost);}
 .gate-footer p{font-size:12px;color:var(--text-d);margin-bottom:10px;}
-.buy-link{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime-d);text-decoration:none;border:1px solid rgba(197,255,0,.25);padding:8px 16px;border-radius:20px;display:inline-block;transition:all .2s;}
-.buy-link:hover{background:var(--lime-dim);border-color:rgba(197,255,0,.5);}
+.buy-link{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime-d);text-decoration:none;border:1px solid rgba(197,255,0,.25);padding:8px 16px;border-radius:20px;display:inline-block;}
 
-/* MAIN APP */
-.hero{padding:56px 20px 36px;text-align:center;max-width:700px;margin:0 auto;}
-.eyebrow{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.22em;color:var(--lime-d);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:12px;}
+/* SHOPIFY CONNECT BANNER */
+.shopify-banner{background:var(--ink2);border:1px solid var(--ghost);border-radius:var(--rl);padding:20px 24px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.sb-left{display:flex;align-items:center;gap:14px;}
+.sb-icon{font-size:28px;}
+.sb-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.06em;margin-bottom:2px;}
+.sb-sub{font-size:12px;color:var(--text-d);}
+.connect-form{display:flex;gap:8px;flex-wrap:wrap;}
+.shop-in{background:var(--ink3);border:1px solid var(--ink5);border-radius:var(--r);padding:10px 13px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;transition:border-color .2s;width:220px;}
+.shop-in:focus{border-color:rgba(197,255,0,.4);}
+.shop-in::placeholder{color:var(--mist);}
+.connect-btn{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.1em;padding:10px 18px;background:var(--lime);color:var(--ink);border:none;border-radius:var(--r);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.connect-btn:hover{background:#D6FF00;}
+.connected-badge{display:flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:11px;color:var(--lime-d);letter-spacing:.08em;}
+.connected-dot{width:8px;height:8px;background:var(--lime);border-radius:50%;box-shadow:0 0 8px var(--lime);}
+
+/* MAIN */
+.hero{padding:40px 20px 28px;text-align:center;max-width:700px;margin:0 auto;}
+.eyebrow{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.22em;color:var(--lime-d);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:12px;}
 .eyebrow::before,.eyebrow::after{content:'';width:28px;height:1px;background:var(--lime-d);opacity:.35;}
-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(58px,13vw,108px);line-height:.9;letter-spacing:.04em;margin-bottom:16px;}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,12vw,100px);line-height:.9;letter-spacing:.04em;margin-bottom:14px;}
 h1 .a{color:var(--lime);text-shadow:0 0 50px rgba(197,255,0,.28);}
 h1 .o{-webkit-text-stroke:1.5px rgba(255,255,255,.1);color:transparent;}
-.hero-p{font-size:clamp(13px,2vw,16px);color:var(--text-d);line-height:1.75;max-width:460px;margin:0 auto;font-weight:300;}
-.steps{display:flex;align-items:center;justify-content:center;max-width:540px;margin:36px auto 0;padding:0 20px;}
+.hero-p{font-size:clamp(13px,2vw,15px);color:var(--text-d);line-height:1.75;max-width:460px;margin:0 auto;font-weight:300;}
+.steps{display:flex;align-items:center;justify-content:center;max-width:540px;margin:28px auto 0;padding:0 20px;}
 .si{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;}
 .sn{width:33px;height:33px;border-radius:50%;border:1px solid var(--mist);font-family:'DM Mono',monospace;font-size:11px;color:var(--fog);display:flex;align-items:center;justify-content:center;transition:all .4s;}
 .sn.lit{border-color:var(--lime);color:var(--lime);background:var(--lime-dim);box-shadow:0 0 14px rgba(197,255,0,.12);}
@@ -74,7 +89,7 @@ h1 .o{-webkit-text-stroke:1.5px rgba(255,255,255,.1);color:transparent;}
 .sl.lit{color:var(--lime-d);}.sl.done{color:var(--lime-d);}
 .sd{flex:1;height:1px;background:var(--mist);margin-bottom:17px;max-width:44px;transition:background .4s;}
 .sd.done{background:var(--lime-d);}
-.wrap{max-width:880px;margin:0 auto;padding:44px 20px 100px;}
+.wrap{max-width:880px;margin:0 auto;padding:36px 20px 100px;}
 .card{background:var(--ink2);border:1px solid var(--ghost);border-radius:var(--rl);margin-bottom:13px;overflow:hidden;}
 .ch{padding:17px 24px;border-bottom:1px solid var(--ghost);display:flex;align-items:center;gap:12px;}
 .cn{font-family:'DM Mono',monospace;font-size:10px;width:26px;height:26px;border-radius:50%;border:1px solid var(--mist);display:flex;align-items:center;justify-content:center;color:var(--fog);flex-shrink:0;transition:all .3s;}
@@ -136,6 +151,17 @@ h1 .o{-webkit-text-stroke:1.5px rgba(255,255,255,.1);color:transparent;}
 .rb:hover{border-color:var(--lime);color:var(--lime-d);}
 .rb.p{background:var(--lime);color:var(--ink);border-color:var(--lime);}
 .rb.p:hover{background:#D6FF00;}
+.rb.shopify{background:rgba(149,191,71,.15);border-color:rgba(149,191,71,.4);color:#95BF47;}
+.rb.shopify:hover{background:rgba(149,191,71,.25);}
+
+/* PUBLISH PANEL */
+.publish-panel{display:none;background:rgba(149,191,71,.05);border:1px solid rgba(149,191,71,.2);border-radius:var(--r);padding:16px;margin:12px 24px;}
+.publish-panel.show{display:block;}
+.pp-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;color:#95BF47;text-transform:uppercase;margin-bottom:12px;}
+.pp-status{font-size:13px;color:var(--text-d);margin-top:8px;}
+.pp-link{color:var(--lime-d);text-decoration:none;font-weight:500;}
+.pp-link:hover{text-decoration:underline;}
+
 .tabs{display:flex;gap:2px;padding:5px;background:var(--ink3);border-bottom:1px solid var(--ghost);flex-wrap:wrap;}
 .tab{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:7px 13px;border-radius:6px;cursor:pointer;color:var(--text-d);background:transparent;border:none;white-space:nowrap;transition:all .2s;}
 .tab:hover{color:var(--text);}
@@ -169,7 +195,7 @@ h1 .o{-webkit-text-stroke:1.5px rgba(255,255,255,.1);color:transparent;}
 .emprev{font-family:'DM Mono',monospace;font-size:10px;color:var(--mist);font-style:italic;}
 .embody{padding:13px 15px;font-size:13px;color:var(--text-d);line-height:1.8;white-space:pre-wrap;}
 ::-webkit-scrollbar{width:3px;height:3px;}::-webkit-scrollbar-track{background:var(--ink);}::-webkit-scrollbar-thumb{background:var(--ink5);border-radius:2px;}
-@media(max-width:560px){.fg-2{grid-template-columns:1fr;}.tb{padding:14px 16px;}.cb{padding:16px;}}
+@media(max-width:560px){.fg-2{grid-template-columns:1fr;}.tb{padding:14px 16px;}.cb{padding:16px;}.connect-form{flex-direction:column;}.shop-in{width:100%;}}
 </style>
 </head>
 <body>
@@ -180,11 +206,9 @@ h1 .o{-webkit-text-stroke:1.5px rgba(255,255,255,.1);color:transparent;}
 <nav>
   <div class="nav-i">
     <div class="logo"><div class="logo-dot"></div>Drop<span>Forge</span></div>
-    <div class="nav-user" id="nav-user">
-      <span id="nav-code"></span>
-      <button class="logout-btn" onclick="logout()">Logout</button>
+    <div class="nav-right" id="nav-right">
+      <div class="nav-tag">AI Store Builder</div>
     </div>
-    <div class="nav-tag" id="nav-tag">AI Store Builder</div>
   </div>
 </nav>
 
@@ -205,7 +229,7 @@ h1 .o{-webkit-text-stroke:1.5px rgba(255,255,255,.1);color:transparent;}
       <div class="code-err" id="code-err"></div>
       <div class="gate-footer">
         <p>Don't have an access code?</p>
-        <a class="buy-link" href="https://dropforge.myshopify.com" target="_blank">Get Access — $19/mo →</a>
+        <a class="buy-link" href="https://ddropforge.myshopify.com" target="_blank">Get Access — $19/mo →</a>
       </div>
     </div>
   </div>
@@ -214,41 +238,57 @@ h1 .o{-webkit-text-stroke:1.5px rgba(255,255,255,.1);color:transparent;}
 <!-- MAIN APP -->
 <div id="app" style="display:none;">
   <div class="hero">
-    <div class="eyebrow">AliExpress & Alibaba → Shopify Brand</div>
-    <h1><div>PASTE.</div><div class="a">FORGE.</div><div class="o">SELL.</div></h1>
-    <p class="hero-p">Screenshot the product listing. DropForge reads the images, extracts every detail, and generates your entire Shopify store — product copy, ads, emails, FAQs and more.</p>
+    <div class="eyebrow">AliExpress & Alibaba → Shopify Store</div>
+    <h1><div>PASTE.</div><div class="a">FORGE.</div><div class="o">PUBLISH.</div></h1>
+    <p class="hero-p">Screenshot any AliExpress product. DropForge builds your entire branded Shopify store and publishes it with one click.</p>
   </div>
   <div class="steps" id="steps">
-    <div class="si"><div class="sn lit" id="sn1">1</div><div class="sl lit" id="sl1">Upload</div></div>
+    <div class="si"><div class="sn lit" id="sn1">1</div><div class="sl lit" id="sl1">Connect</div></div>
     <div class="sd" id="sd1"></div>
-    <div class="si"><div class="sn" id="sn2">2</div><div class="sl" id="sl2">Details</div></div>
+    <div class="si"><div class="sn" id="sn2">2</div><div class="sl" id="sl2">Product</div></div>
     <div class="sd" id="sd2"></div>
     <div class="si"><div class="sn" id="sn3">3</div><div class="sl" id="sl3">Forge</div></div>
     <div class="sd" id="sd3"></div>
-    <div class="si"><div class="sn" id="sn4">4</div><div class="sl" id="sl4">Results</div></div>
+    <div class="si"><div class="sn" id="sn4">4</div><div class="sl" id="sl4">Publish</div></div>
   </div>
+
   <div class="wrap">
+    <!-- SHOPIFY CONNECT -->
+    <div class="shopify-banner" id="shopify-banner">
+      <div class="sb-left">
+        <div class="sb-icon">🛍️</div>
+        <div>
+          <div class="sb-title">Connect Your Shopify Store</div>
+          <div class="sb-sub" id="sb-sub">Connect once — publish products instantly</div>
+        </div>
+      </div>
+      <div id="connect-area">
+        <div class="connect-form">
+          <input class="shop-in" id="shop-input" type="text" placeholder="yourstore.myshopify.com"
+            onkeydown="if(event.key==='Enter')connectShop()"/>
+          <button class="connect-btn" onclick="connectShop()">Connect →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCT INPUT -->
     <div class="card" id="card1">
       <div class="ch">
-        <div class="cn lit">01</div>
+        <div class="cn" id="cn1">01</div>
         <div class="ct">Product Info</div>
         <div class="cs">Screenshot or type the details</div>
       </div>
       <div class="cb">
-        <div class="fg"><label>📸 Screenshot Images (drag & drop up to 8)</label></div>
+        <div class="fg"><label>📸 Screenshot Images — use Win+Shift+S (PC) or Cmd+Shift+4 (Mac)</label></div>
         <div class="upload-zone" id="upload-zone" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFiles(event)">
-          <input type="file" class="uz-input" id="file-input" accept="image/*" multiple onchange="handleFiles(event)">
+          <input type="file" class="uz-input" id="file-input" accept="image/png,image/jpeg,image/webp,image/gif" multiple onchange="handleFiles(event)">
           <span class="uz-icon">📷</span>
-          <div class="uz-title">Drop screenshots here or click to upload</div>
-          <div class="uz-sub">Works with product title, description, bullet point, and spec images</div>
+          <div class="uz-title">Drop PNG/JPG screenshots here or click to upload</div>
+          <div class="uz-sub">Screenshot the product title, features, specs — up to 8 images</div>
         </div>
         <div class="img-previews" id="img-previews"></div>
         <div class="img-count" id="img-count"></div>
         <div class="dvd">or type manually</div>
-        <div class="fg">
-          <label>Product URL (optional, for reference)</label>
-          <input type="url" id="p-url" placeholder="https://www.aliexpress.com/item/..."/>
-        </div>
         <div class="fg">
           <label>Product Title</label>
           <input type="text" id="p-title" placeholder="Copy/type the product title"/>
@@ -259,6 +299,8 @@ h1 .o{-webkit-text-stroke:1.5px rgba(255,255,255,.1);color:transparent;}
         </div>
       </div>
     </div>
+
+    <!-- SETTINGS -->
     <div class="card" id="card2">
       <div class="ch">
         <div class="cn" id="cn2">02</div>
@@ -293,12 +335,14 @@ h1 .o{-webkit-text-stroke:1.5px rgba(255,255,255,.1);color:transparent;}
         <button class="forge-btn" id="forge-btn" onclick="forge()">⚡ FORGE MY STORE</button>
       </div>
     </div>
+
+    <!-- LOADING -->
     <div class="card loading" id="loading">
       <span class="hammer">🔨</span>
       <div class="lh">FORGING YOUR STORE</div>
-      <div class="ls">Turning raw product into a real brand...</div>
+      <div class="ls">Building your brand from scratch...</div>
       <div class="log">
-        <div class="lg on" id="lg1">Reading images & product data</div>
+        <div class="lg on" id="lg1">Reading product data</div>
         <div class="lg" id="lg2">Building brand identity</div>
         <div class="lg" id="lg3">Writing product copy</div>
         <div class="lg" id="lg4">Crafting ad copy</div>
@@ -306,74 +350,92 @@ h1 .o{-webkit-text-stroke:1.5px rgba(255,255,255,.1);color:transparent;}
         <div class="lg" id="lg6">Finalizing everything</div>
       </div>
     </div>
+
+    <!-- RESULTS -->
     <div class="results" id="results">
       <div class="rh">
         <div class="rt">STORE <span>READY</span> ⚡</div>
         <div class="ra">
+          <button class="rb shopify" id="publish-btn" onclick="publishToShopify()">🛍️ Publish to Shopify</button>
           <button class="rb" onclick="copyAll()">Copy All</button>
           <button class="rb p" onclick="reset()">New Product</button>
         </div>
+      </div>
+      <div class="publish-panel" id="publish-panel">
+        <div class="pp-title">Publishing to Shopify...</div>
+        <div class="pp-status" id="pp-status"></div>
       </div>
       <div class="tabs" id="tabs"></div>
       <div class="tb"><div id="panes"></div></div>
     </div>
   </div>
-</div><!-- end #app -->
+</div>
 
-</div><!-- end .z -->
+</div>
 
 <script>
-let imgFiles=[], _data=null, _accessCode='';
+let imgFiles=[], _data=null, _accessCode='', _shop='';
 
-// Check if already logged in (session)
+// Check URL params (after Shopify OAuth redirect)
 window.addEventListener('load', () => {
+  const params = new URLSearchParams(window.location.search);
   const saved = sessionStorage.getItem('df_code');
   if(saved) unlockApp(saved);
+  if(params.get('connected') === 'true' && params.get('shop')) {
+    _shop = params.get('shop');
+    sessionStorage.setItem('df_shop', _shop);
+    showConnected(_shop);
+    window.history.replaceState({}, '', '/');
+  }
+  const savedShop = sessionStorage.getItem('df_shop');
+  if(savedShop) { _shop = savedShop; showConnected(savedShop); }
 });
 
 async function validateCode() {
   const code = document.getElementById('code-input').value.trim().toUpperCase();
   if(!code) return;
   const btn = document.getElementById('code-go');
-  btn.disabled = true;
-  btn.textContent = '...';
+  btn.disabled=true; btn.textContent='...';
   try {
-    const res = await fetch('/api/validate', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({code})
-    });
+    const res = await fetch('/api/validate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code})});
     const data = await res.json();
-    if(data.valid) {
-      sessionStorage.setItem('df_code', code);
-      unlockApp(code);
-    } else {
-      document.getElementById('code-err').textContent = 'Invalid code. Purchase at dropforge.myshopify.com';
-      btn.disabled=false; btn.textContent='GO';
-    }
-  } catch(err) {
-    document.getElementById('code-err').textContent = 'Connection error. Try again.';
-    btn.disabled=false; btn.textContent='GO';
-  }
+    if(data.valid) { sessionStorage.setItem('df_code',code); unlockApp(code); }
+    else { document.getElementById('code-err').textContent='Invalid code.'; btn.disabled=false; btn.textContent='GO'; }
+  } catch(err) { document.getElementById('code-err').textContent='Connection error.'; btn.disabled=false; btn.textContent='GO'; }
 }
 
 function unlockApp(code) {
-  _accessCode = code;
-  document.getElementById('gate').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  document.getElementById('nav-tag').style.display = 'none';
-  document.getElementById('nav-user').classList.add('show');
-  document.getElementById('nav-code').textContent = code;
+  _accessCode=code;
+  document.getElementById('gate').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('nav-right').innerHTML=`<span class="nav-code">${code}</span><button class="nav-btn" onclick="logout()">Logout</button>`;
+  document.getElementById('cn1').className='cn lit';
+  setStep(1);
 }
 
 function logout() {
-  sessionStorage.removeItem('df_code');
-  _accessCode = '';
-  document.getElementById('gate').style.display = 'flex';
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('nav-tag').style.display = 'block';
-  document.getElementById('nav-user').classList.remove('show');
-  document.getElementById('code-input').value = '';
+  sessionStorage.clear(); _accessCode=''; _shop='';
+  document.getElementById('gate').style.display='flex';
+  document.getElementById('app').style.display='none';
+  document.getElementById('nav-right').innerHTML='<div class="nav-tag">AI Store Builder</div>';
+  document.getElementById('code-input').value='';
+}
+
+function connectShop() {
+  let shop = document.getElementById('shop-input').value.trim().toLowerCase();
+  if(!shop) return;
+  if(!shop.includes('.myshopify.com')) shop = shop + '.myshopify.com';
+  sessionStorage.setItem('df_shop_pending', shop);
+  window.location.href = `/auth/install?shop=${shop}`;
+}
+
+function showConnected(shop) {
+  _shop = shop;
+  document.getElementById('connect-area').innerHTML=`<div class="connected-badge"><div class="connected-dot"></div>${shop}</div>`;
+  document.getElementById('sb-sub').textContent='Store connected — ready to publish';
+  document.getElementById('cn1').className='cn done';
+  document.getElementById('cn1').textContent='✓';
+  setStep(2);
 }
 
 document.querySelectorAll('.tog').forEach(t => t.addEventListener('click', () => t.classList.toggle('on')));
@@ -393,21 +455,23 @@ function dragLeave(){document.getElementById('upload-zone').classList.remove('dr
 function dropFiles(e){e.preventDefault();dragLeave();handleFilesRaw([...e.dataTransfer.files]);}
 function handleFiles(e){handleFilesRaw([...e.target.files]);}
 function handleFilesRaw(files){
-  imgFiles=[...imgFiles,...files.filter(f=>f.type.startsWith('image/'))].slice(0,8);
+  const allowed=['image/png','image/jpeg','image/webp','image/gif'];
+  const valid=files.filter(f=>allowed.includes(f.type));
+  if(valid.length<files.length) alert('Only PNG, JPG, WEBP images are supported. AVIF files will be skipped.');
+  imgFiles=[...imgFiles,...valid].slice(0,8);
   renderPreviews();
-  if(imgFiles.length>0){document.getElementById('upload-zone').classList.add('has-files');document.getElementById('cn2').className='cn lit';setStep(2);}
+  if(imgFiles.length>0){document.getElementById('upload-zone').classList.add('has-files');document.getElementById('cn2').className='cn lit';setStep(_shop?2:2);}
 }
 function renderPreviews(){
   const wrap=document.getElementById('img-previews');
   wrap.innerHTML='';
   imgFiles.forEach((f,i)=>{
     const url=URL.createObjectURL(f);
-    const div=document.createElement('div');
-    div.className='img-prev';
-    div.innerHTML=`<img src="${url}" alt="product"/><button class="img-remove" onclick="removeImg(${i})">✕</button>`;
+    const div=document.createElement('div');div.className='img-prev';
+    div.innerHTML=`<img src="${url}" alt=""/><button class="img-remove" onclick="removeImg(${i})">✕</button>`;
     wrap.appendChild(div);
   });
-  document.getElementById('img-count').textContent=imgFiles.length>0?`${imgFiles.length} image${imgFiles.length>1?'s':''} uploaded`:'';
+  document.getElementById('img-count').textContent=imgFiles.length>0?`${imgFiles.length} image${imgFiles.length>1?'s':''} ready`:'';
 }
 function removeImg(i){imgFiles.splice(i,1);renderPreviews();if(imgFiles.length===0)document.getElementById('upload-zone').classList.remove('has-files');}
 function toBase64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(file);});}
@@ -415,7 +479,7 @@ function toBase64(file){return new Promise((res,rej)=>{const r=new FileReader();
 let timer;
 function startAnim(){
   const ids=['lg1','lg2','lg3','lg4','lg5','lg6'];
-  const labels=['Reading images & product data','Building brand identity','Writing product copy','Crafting ad copy','Writing email sequence','Finalizing everything'];
+  const labels=['Reading product data','Building brand identity','Writing product copy','Crafting ad copy','Writing email sequence','Finalizing everything'];
   let i=0;
   timer=setInterval(()=>{
     if(i>0){const p=document.getElementById(ids[i-1]);p.classList.remove('on');p.classList.add('done');p.textContent='✓ '+labels[i-1];}
@@ -431,43 +495,39 @@ async function forge(){
   if(imgFiles.length===0&&!title&&!desc){alert('Please upload screenshots or paste product details.');return;}
   if(!price){document.getElementById('p-price').focus();alert('Please enter your selling price.');return;}
   const toggles=[...document.querySelectorAll('.tog.on')].map(t=>t.dataset.v);
-  if(!toggles.length){alert('Select at least one section to generate.');return;}
+  if(!toggles.length){alert('Select at least one section.');return;}
   const market=document.getElementById('p-market').value;
   const brand=document.getElementById('p-brand').value;
   const tone=document.getElementById('p-tone').value;
-  const url=document.getElementById('p-url').value;
-  const src=url.toLowerCase().includes('alibaba')?'Alibaba':'AliExpress';
   document.getElementById('card1').style.display='none';
   document.getElementById('card2').style.display='none';
   document.getElementById('loading').classList.add('show');
   document.getElementById('results').classList.remove('show');
   document.getElementById('forge-btn').disabled=true;
   setStep(3);startAnim();
-  const systemPrompt=`You are an expert ecommerce brand builder. Transform ${src} supplier products into premium branded Shopify stores. Never mention China, suppliers, wholesale, AliExpress or Alibaba.`;
-  const jsonSchema=`{"brand_name":{"name":"Name","tagline":"Tagline","story":"Story"},"product_description":{"branded_name":"Name","short":"Short","long":"Long","bullets":["B1","B2","B3","B4","B5"]},"landing_page":{"headline":"Headline","subheadline":"Sub","hero_body":"Body","problem":"Problem","solution":"Solution","cta_primary":"CTA","cta_secondary":"CTA2","urgency":"Urgency"},"ads":[{"platform":"TikTok/Reels","variation":1,"hook":"Hook","body":"Body","cta":"CTA","hashtags":"#tag1 #tag2 #tag3"},{"platform":"TikTok/Reels","variation":2,"hook":"Hook","body":"Body","cta":"CTA","hashtags":"#tag1 #tag2"},{"platform":"Facebook","variation":3,"hook":"Hook","body":"Body","cta":"CTA","hashtags":""},{"platform":"TikTok/Reels","variation":4,"hook":"Hook","body":"Body","cta":"CTA","hashtags":"#tag1 #tag2"}],"emails":[{"number":1,"type":"Order Confirmation","subject":"Sub","preview":"Prev","body":"Body"},{"number":2,"type":"Day 2 Value","subject":"Sub","preview":"Prev","body":"Body"},{"number":3,"type":"Day 5 Review","subject":"Sub","preview":"Prev","body":"Body"},{"number":4,"type":"Day 14 Upsell","subject":"Sub","preview":"Prev","body":"Body"}],"social_bios":{"tiktok":"Bio","instagram":"Bio","facebook":"Bio","twitter":"Bio"},"faq":[{"q":"Q?","a":"A."},{"q":"Q?","a":"A."},{"q":"Q?","a":"A."},{"q":"Q?","a":"A."},{"q":"Q?","a":"A."},{"q":"Q?","a":"A."}]}`;
+  const systemPrompt=`You are an expert ecommerce brand builder. Transform AliExpress/Alibaba supplier products into premium branded Shopify stores. Never mention China, suppliers, wholesale, AliExpress or Alibaba.`;
+  const jsonSchema=`{"brand_name":{"name":"Name","tagline":"Tagline","story":"Story"},"product_description":{"branded_name":"Name","short":"Short desc","long":"Long desc","bullets":["B1","B2","B3","B4","B5"]},"landing_page":{"headline":"Headline","subheadline":"Sub","hero_body":"Body","problem":"Problem","solution":"Solution","cta_primary":"CTA","cta_secondary":"CTA2","urgency":"Urgency"},"ads":[{"platform":"TikTok/Reels","variation":1,"hook":"Hook","body":"Body","cta":"CTA","hashtags":"#tag1 #tag2 #tag3"},{"platform":"TikTok/Reels","variation":2,"hook":"Hook2","body":"Body2","cta":"CTA","hashtags":"#tag1 #tag2"},{"platform":"Facebook","variation":3,"hook":"Hook3","body":"Body3","cta":"CTA","hashtags":""},{"platform":"TikTok/Reels","variation":4,"hook":"Hook4","body":"Body4","cta":"CTA","hashtags":"#tag1 #tag2"}],"emails":[{"number":1,"type":"Order Confirmation","subject":"Sub","preview":"Prev","body":"Body"},{"number":2,"type":"Day 2 Value","subject":"Sub","preview":"Prev","body":"Body"},{"number":3,"type":"Day 5 Review","subject":"Sub","preview":"Prev","body":"Body"},{"number":4,"type":"Day 14 Upsell","subject":"Sub","preview":"Prev","body":"Body"}],"social_bios":{"tiktok":"Bio","instagram":"Bio","facebook":"Bio","twitter":"Bio"},"faq":[{"q":"Q?","a":"A."},{"q":"Q?","a":"A."},{"q":"Q?","a":"A."},{"q":"Q?","a":"A."},{"q":"Q?","a":"A."},{"q":"Q?","a":"A."}]}`;
   try{
     const content=[];
     if(imgFiles.length>0){
-      for(const f of imgFiles){const b64=await toBase64(f);content.push({type:'image',source:{type:'base64',media_type:f.type||'image/jpeg',data:b64}});}
-      content.push({type:'text',text:`These are screenshots from an ${src} product listing. Extract all visible product information.`});
+      for(const f of imgFiles){const b64=await toBase64(f);content.push({type:'image',source:{type:'base64',media_type:f.type,data:b64}});}
+      content.push({type:'text',text:'These are screenshots from an AliExpress product listing. Extract all visible product information including title, features, specifications, dimensions, materials, and anything else visible.'});
     }
     let parts=[];
     if(title) parts.push(`PRODUCT TITLE: ${title}`);
     if(desc) parts.push(`DETAILS: ${desc.slice(0,1500)}`);
-    parts.push(`PRICE: ${price}`,`MARKET: ${market||'general consumers'}`,`BRAND: ${brand||'auto-generate'}`,`TONE: ${tone}`,`SECTIONS: ${toggles.join(', ')}`,`\nReturn ONLY valid JSON matching this schema (only include requested sections):\n${jsonSchema}`);
+    parts.push(`SELLING PRICE: ${price}`,`TARGET MARKET: ${market||'general consumers'}`,`BRAND NAME: ${brand||'auto-generate a great brandable name'}`,`TONE: ${tone}`,`SECTIONS: ${toggles.join(', ')}`,`\nReturn ONLY valid JSON matching this schema:\n${jsonSchema}`);
     content.push({type:'text',text:parts.join('\n')});
-    const res=await fetch('/api/forge',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({system:systemPrompt,max_tokens:4000,messages:[{role:'user',content}],access_code:_accessCode})
-    });
-    if(!res.ok){const e=await res.json();throw new Error(e.error||'API '+res.status);}
+    const res=await fetch('/api/forge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:systemPrompt,max_tokens:4000,messages:[{role:'user',content}],access_code:_accessCode})});
+    if(!res.ok){const er=await res.json();throw new Error(er.error||'API '+res.status);}
     const data=await res.json();
     if(!data.content) throw new Error('No response');
     const raw=data.content.map(i=>i.text||'').join('');
     let result;
     try{result=JSON.parse(raw.replace(/```json|```/g,'').trim());}
     catch{const m=raw.match(/\{[\s\S]*\}/);if(m)result=JSON.parse(m[0]);else throw new Error('JSON parse failed');}
+    // Attach price for publishing
+    result._price = price;
     clearInterval(timer);_data=result;render(result,toggles);
   }catch(err){
     clearInterval(timer);
@@ -475,8 +535,41 @@ async function forge(){
     document.getElementById('card1').style.display='block';
     document.getElementById('card2').style.display='block';
     document.getElementById('forge-btn').disabled=false;
-    setStep(imgFiles.length>0?2:1);
+    setStep(_shop?2:1);
     alert('Generation failed.\n\nError: '+err.message);
+  }
+}
+
+async function publishToShopify(){
+  if(!_data) return;
+  if(!_shop){
+    alert('Please connect your Shopify store first using the Connect button at the top.');
+    return;
+  }
+  const btn=document.getElementById('publish-btn');
+  btn.disabled=true; btn.textContent='Publishing...';
+  const panel=document.getElementById('publish-panel');
+  panel.classList.add('show');
+  document.getElementById('pp-status').textContent='Creating product in your Shopify store...';
+
+  const product={
+    brand_name: _data.brand_name?.name || 'DropForge Brand',
+    branded_name: _data.product_description?.branded_name || 'Product',
+    long: _data.product_description?.long || '',
+    bullets: _data.product_description?.bullets || [],
+    price: _data._price || '29.99'
+  };
+
+  try{
+    const res=await fetch('/api/publish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({shop:_shop,access_code:_accessCode,product})});
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.error||'Publish failed');
+    document.getElementById('pp-status').innerHTML=`✅ Product created! <a class="pp-link" href="${data.productUrl}" target="_blank">View in Shopify →</a>`;
+    btn.textContent='✓ Published';
+    setStep(4);
+  }catch(err){
+    document.getElementById('pp-status').textContent='❌ Error: '+err.message;
+    btn.disabled=false; btn.textContent='🛍️ Publish to Shopify';
   }
 }
 
@@ -491,11 +584,8 @@ function render(data,toggles){
     t.className='tab'+(first?' on':'');t.textContent=tNames[k]||k;t.dataset.k=k;
     t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.dataset.k===k));document.querySelectorAll('.pane').forEach(x=>x.classList.toggle('show',x.id==='p-'+k));};
     te.appendChild(t);
-    const p=document.createElement('div');
-    p.className='pane'+(first?' show':'');p.id='p-'+k;
-    p.innerHTML=bp(k,data[k]);
-    pe.appendChild(p);
-    first=false;
+    const p=document.createElement('div');p.className='pane'+(first?' show':'');p.id='p-'+k;
+    p.innerHTML=bp(k,data[k]);pe.appendChild(p);first=false;
   });
   document.getElementById('loading').classList.remove('show');
   document.getElementById('results').classList.add('show');
@@ -518,19 +608,22 @@ function blk(l,html,ct,raw=false,cls=''){
 }
 function e(s){return(s||'').replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');}
 function cp(btn,text){navigator.clipboard.writeText(text).then(()=>{const o=btn.textContent;btn.textContent='✓ Copied';btn.classList.add('ok');setTimeout(()=>{btn.textContent=o;btn.classList.remove('ok');},2000);});}
-function copyAll(){if(!_data)return;navigator.clipboard.writeText(JSON.stringify(_data,null,2)).then(()=>{const b=document.querySelector('.rb:not(.p)');if(b){b.textContent='✓ Copied';setTimeout(()=>b.textContent='Copy All',2000);}});}
+function copyAll(){if(!_data)return;navigator.clipboard.writeText(JSON.stringify(_data,null,2)).then(()=>{const b=document.querySelector('.rb:not(.p):not(.shopify)');if(b){b.textContent='✓ Copied';setTimeout(()=>b.textContent='Copy All',2000);}});}
 function reset(){
   document.getElementById('results').classList.remove('show');
   document.getElementById('loading').classList.remove('show');
+  document.getElementById('publish-panel').classList.remove('show');
   ['card1','card2'].forEach(id=>document.getElementById(id).style.display='block');
   document.getElementById('forge-btn').disabled=false;
-  ['p-url','p-title','p-desc','p-price','p-market','p-brand'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('publish-btn').disabled=false;
+  document.getElementById('publish-btn').textContent='🛍️ Publish to Shopify';
+  ['p-title','p-desc','p-price','p-market','p-brand'].forEach(id=>document.getElementById(id).value='');
   imgFiles=[];renderPreviews();
   document.getElementById('upload-zone').classList.remove('has-files');
   document.getElementById('cn2').className='cn';
-  const labels=['Reading images & product data','Building brand identity','Writing product copy','Crafting ad copy','Writing email sequence','Finalizing everything'];
+  const labels=['Reading product data','Building brand identity','Writing product copy','Crafting ad copy','Writing email sequence','Finalizing everything'];
   ['lg1','lg2','lg3','lg4','lg5','lg6'].forEach((id,i)=>{const el=document.getElementById(id);el.className='lg'+(i===0?' on':'');el.textContent=labels[i];});
-  setStep(1);window.scrollTo({top:0,behavior:'smooth'});
+  setStep(_shop?2:1);window.scrollTo({top:0,behavior:'smooth'});
 }
 </script>
 </body>
