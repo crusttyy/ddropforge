@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DropForge — AI Store Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --ink:#08080D;--ink2:#0F0F16;--ink3:#16161F;--ink4:#1E1E28;--ink5:#252532;
+  --lime:#C5FF00;--lime-d:#96CC00;--lime-dim:rgba(197,255,0,.07);
+  --fog:#666;--mist:#333;--ghost:#1A1A24;
+  --text:#EEEEF5;--text-d:#777;
+  --r:8px;--rl:13px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(197,255,0,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(197,255,0,.02) 1px,transparent 1px);background-size:52px 52px;}
+.orbs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.o1{position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(197,255,0,.07),transparent 70%);top:-200px;right:-100px;filter:blur(120px);animation:drift 22s ease-in-out infinite alternate;}
+.o2{position:absolute;width:450px;height:450px;background:radial-gradient(circle,rgba(0,212,255,.05),transparent 70%);bottom:-150px;left:-80px;filter:blur(120px);animation:drift 28s ease-in-out infinite alternate-reverse;}
+@keyframes drift{to{transform:translate(40px,25px);}}
+.z{position:relative;z-index:1;}
+nav{background:rgba(8,8,13,.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--ghost);padding:0 20px;position:sticky;top:0;z-index:200;}
+.nav-i{max-width:880px;margin:0 auto;height:52px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.1em;display:flex;align-items:center;gap:10px;}
+.logo-dot{width:8px;height:8px;background:var(--lime);border-radius:50%;box-shadow:0 0 10px var(--lime);animation:pp 2.5s ease-in-out infinite;}
+@keyframes pp{0%,100%{opacity:1;}50%{opacity:.3;}}
+.logo span{color:var(--lime);}
+.nav-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;padding:4px 10px;border:1px solid var(--mist);border-radius:20px;color:var(--fog);text-transform:uppercase;}
+.nav-user{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--lime-d);display:none;align-items:center;gap:8px;}
+.nav-user.show{display:flex;}
+.logout-btn{background:none;border:1px solid var(--mist);border-radius:4px;padding:3px 8px;color:var(--fog);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;cursor:pointer;transition:all .2s;text-transform:uppercase;}
+.logout-btn:hover{border-color:var(--fog);color:var(--text);}
+
+/* GATE */
+.gate{min-height:90vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.gate-box{max-width:400px;width:100%;text-align:center;}
+.gate-icon{font-size:44px;margin-bottom:16px;}
+.gate-title{font-family:'Bebas Neue',sans-serif;font-size:58px;letter-spacing:.06em;line-height:1;margin-bottom:6px;}
+.gate-title span{color:var(--lime);}
+.gate-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--fog);text-transform:uppercase;margin-bottom:32px;}
+.gate-card{background:var(--ink2);border:1px solid var(--ghost);border-radius:var(--rl);padding:28px;}
+.gate-label{font-size:14px;color:var(--text-d);margin-bottom:20px;line-height:1.6;}
+.code-row{display:flex;gap:8px;margin-bottom:10px;}
+.code-in{flex:1;background:var(--ink3);border:1px solid var(--ink5);border-radius:var(--r);padding:13px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.12em;outline:none;transition:border-color .2s;text-transform:uppercase;}
+.code-in:focus{border-color:rgba(197,255,0,.4);}
+.code-in::placeholder{color:var(--mist);text-transform:none;}
+.code-go{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.1em;padding:13px 20px;background:var(--lime);color:var(--ink);border:none;border-radius:var(--r);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.code-go:hover{background:#D6FF00;}
+.code-go:disabled{opacity:.4;cursor:not-allowed;}
+.code-err{font-family:'DM Mono',monospace;font-size:10px;color:#FF3366;letter-spacing:.06em;min-height:16px;margin-bottom:4px;}
+.gate-footer{margin-top:22px;padding-top:18px;border-top:1px solid var(--ghost);}
+.gate-footer p{font-size:12px;color:var(--text-d);margin-bottom:10px;}
+.buy-link{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime-d);text-decoration:none;border:1px solid rgba(197,255,0,.25);padding:8px 16px;border-radius:20px;display:inline-block;transition:all .2s;}
+.buy-link:hover{background:var(--lime-dim);border-color:rgba(197,255,0,.5);}
+
+/* MAIN APP */
+.hero{padding:56px 20px 36px;text-align:center;max-width:700px;margin:0 auto;}
+.eyebrow{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.22em;color:var(--lime-d);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:12px;}
+.eyebrow::before,.eyebrow::after{content:'';width:28px;height:1px;background:var(--lime-d);opacity:.35;}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(58px,13vw,108px);line-height:.9;letter-spacing:.04em;margin-bottom:16px;}
+h1 .a{color:var(--lime);text-shadow:0 0 50px rgba(197,255,0,.28);}
+h1 .o{-webkit-text-stroke:1.5px rgba(255,255,255,.1);color:transparent;}
+.hero-p{font-size:clamp(13px,2vw,16px);color:var(--text-d);line-height:1.75;max-width:460px;margin:0 auto;font-weight:300;}
+.steps{display:flex;align-items:center;justify-content:center;max-width:540px;margin:36px auto 0;padding:0 20px;}
+.si{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;}
+.sn{width:33px;height:33px;border-radius:50%;border:1px solid var(--mist);font-family:'DM Mono',monospace;font-size:11px;color:var(--fog);display:flex;align-items:center;justify-content:center;transition:all .4s;}
+.sn.lit{border-color:var(--lime);color:var(--lime);background:var(--lime-dim);box-shadow:0 0 14px rgba(197,255,0,.12);}
+.sn.done{border-color:var(--lime-d);background:var(--lime);color:var(--ink);font-size:13px;}
+.sl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--mist);transition:color .4s;text-align:center;}
+.sl.lit{color:var(--lime-d);}.sl.done{color:var(--lime-d);}
+.sd{flex:1;height:1px;background:var(--mist);margin-bottom:17px;max-width:44px;transition:background .4s;}
+.sd.done{background:var(--lime-d);}
+.wrap{max-width:880px;margin:0 auto;padding:44px 20px 100px;}
+.card{background:var(--ink2);border:1px solid var(--ghost);border-radius:var(--rl);margin-bottom:13px;overflow:hidden;}
+.ch{padding:17px 24px;border-bottom:1px solid var(--ghost);display:flex;align-items:center;gap:12px;}
+.cn{font-family:'DM Mono',monospace;font-size:10px;width:26px;height:26px;border-radius:50%;border:1px solid var(--mist);display:flex;align-items:center;justify-content:center;color:var(--fog);flex-shrink:0;transition:all .3s;}
+.cn.lit{border-color:var(--lime);color:var(--lime);}
+.ct{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.06em;}
+.cs{font-size:12px;color:var(--text-d);margin-left:auto;}
+.cb{padding:22px 24px;}
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.fg label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--fog);text-transform:uppercase;}
+.fg input,.fg textarea,.fg select{background:var(--ink3);border:1px solid var(--ink5);border-radius:var(--r);padding:11px 13px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;resize:vertical;width:100%;}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:rgba(197,255,0,.4);}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--mist);}
+.fg textarea{min-height:88px;line-height:1.6;}
+.fg select option{background:var(--ink2);}
+.fg-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.upload-zone{border:2px dashed var(--ink5);border-radius:var(--r);padding:28px 20px;text-align:center;cursor:pointer;transition:all .25s;position:relative;margin-bottom:12px;}
+.upload-zone:hover,.upload-zone.drag{border-color:rgba(197,255,0,.4);background:var(--lime-dim);}
+.upload-zone.has-files{border-color:rgba(197,255,0,.3);background:rgba(197,255,0,.04);}
+.uz-icon{font-size:28px;margin-bottom:8px;display:block;}
+.uz-title{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-d);margin-bottom:4px;}
+.uz-sub{font-size:12px;color:var(--mist);}
+.uz-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.img-previews{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.img-prev{position:relative;width:72px;height:72px;border-radius:6px;overflow:hidden;border:1px solid var(--ink5);}
+.img-prev img{width:100%;height:100%;object-fit:cover;}
+.img-remove{position:absolute;top:2px;right:2px;width:18px;height:18px;background:rgba(0,0,0,.8);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;color:var(--text-d);border:none;}
+.img-remove:hover{color:#FF3366;}
+.img-count{font-family:'DM Mono',monospace;font-size:10px;color:var(--lime-d);margin-top:6px;letter-spacing:.08em;}
+.dvd{display:flex;align-items:center;gap:10px;margin:4px 0 14px;color:var(--mist);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;}
+.dvd::before,.dvd::after{content:'';flex:1;height:1px;background:var(--ghost);}
+.tl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--fog);text-transform:uppercase;margin-bottom:9px;}
+.tr{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:22px;}
+.tog{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border:1px solid var(--ink5);border-radius:20px;cursor:pointer;color:var(--text-d);background:transparent;transition:all .2s;}
+.tog:hover{border-color:var(--fog);color:var(--text);}
+.tog.on{background:var(--lime-dim);border-color:rgba(197,255,0,.35);color:var(--lime-d);}
+.forge-btn{width:100%;font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.14em;padding:20px;background:var(--lime);color:var(--ink);border:none;border-radius:var(--r);cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:12px;position:relative;overflow:hidden;}
+.forge-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transform:translateX(-100%);transition:transform .5s;}
+.forge-btn:hover::after{transform:translateX(100%);}
+.forge-btn:hover{background:#D6FF00;transform:translateY(-2px);box-shadow:0 10px 40px rgba(197,255,0,.3);}
+.forge-btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.loading{display:none;text-align:center;padding:60px 24px;}
+.loading.show{display:block;}
+.hammer{font-size:52px;display:block;margin-bottom:22px;animation:hmr 1.6s ease-in-out infinite;}
+@keyframes hmr{0%,100%{transform:rotate(-20deg) translateY(0);}50%{transform:rotate(15deg) translateY(-10px);}}
+.lh{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:.1em;margin-bottom:6px;}
+.ls{font-size:13px;color:var(--text-d);margin-bottom:30px;font-weight:300;}
+.log{display:flex;flex-direction:column;gap:5px;max-width:260px;margin:0 auto;}
+.lg{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--mist);display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:6px;transition:all .35s;}
+.lg.on{color:var(--lime-d);background:var(--lime-dim);}
+.lg.done{color:var(--lime-d);}
+.lg::before{content:'○';flex-shrink:0;}.lg.on::before{content:'◉';}.lg.done::before{content:'✓';}
+.results{display:none;background:var(--ink2);border:1px solid var(--ghost);border-radius:var(--rl);overflow:hidden;}
+.results.show{display:block;}
+.rh{padding:17px 24px;border-bottom:1px solid var(--ghost);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.rt{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.08em;}
+.rt span{color:var(--lime);}
+.ra{display:flex;gap:7px;flex-wrap:wrap;}
+.rb{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:7px 13px;border-radius:var(--r);cursor:pointer;border:1px solid var(--mist);background:transparent;color:var(--fog);transition:all .2s;}
+.rb:hover{border-color:var(--lime);color:var(--lime-d);}
+.rb.p{background:var(--lime);color:var(--ink);border-color:var(--lime);}
+.rb.p:hover{background:#D6FF00;}
+.tabs{display:flex;gap:2px;padding:5px;background:var(--ink3);border-bottom:1px solid var(--ghost);flex-wrap:wrap;}
+.tab{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:7px 13px;border-radius:6px;cursor:pointer;color:var(--text-d);background:transparent;border:none;white-space:nowrap;transition:all .2s;}
+.tab:hover{color:var(--text);}
+.tab.on{background:var(--ink2);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.5);}
+.tb{padding:20px 24px;}
+.pane{display:none;}.pane.show{display:block;}
+.ob{background:var(--ink3);border:1px solid var(--ink5);border-radius:var(--r);overflow:hidden;margin-bottom:9px;}
+.obh{padding:9px 13px;border-bottom:1px solid var(--ink5);display:flex;align-items:center;justify-content:space-between;}
+.obl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--fog);text-transform:uppercase;}
+.obb{padding:13px 15px;font-size:14px;color:var(--text-d);line-height:1.75;white-space:pre-wrap;word-break:break-word;}
+.obb.xl{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:.04em;color:var(--lime);line-height:1.1;}
+.obb.lg{font-size:19px;font-weight:600;color:var(--text);line-height:1.35;}
+.obb.hot{border-left:2px solid var(--lime);background:rgba(197,255,0,.03);color:var(--text);}
+.cp{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;background:transparent;border:1px solid var(--ink5);border-radius:4px;color:var(--fog);cursor:pointer;transition:all .2s;}
+.cp:hover{border-color:var(--lime);color:var(--lime-d);}
+.cp.ok{border-color:var(--lime-d);color:var(--lime-d);}
+.adc{background:var(--ink3);border:1px solid var(--ink5);border-radius:var(--r);padding:18px;margin-bottom:9px;border-left:2px solid var(--lime);}
+.adtop{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
+.adp{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.08em;color:var(--lime-d);}
+.adv{font-family:'DM Mono',monospace;font-size:9px;padding:3px 8px;background:var(--lime-dim);border:1px solid rgba(197,255,0,.2);border-radius:10px;color:var(--lime-d);}
+.af{margin-bottom:9px;}
+.afl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--mist);text-transform:uppercase;margin-bottom:2px;}
+.afv{font-size:14px;color:var(--text-d);line-height:1.6;}
+.afv.hk{font-size:18px;font-weight:600;color:var(--text);}
+.afv.tg{font-family:'DM Mono',monospace;font-size:11px;color:#A78BFA;}
+.emc{background:var(--ink3);border:1px solid var(--ink5);border-radius:var(--r);overflow:hidden;margin-bottom:9px;}
+.emtop{padding:11px 15px;border-bottom:1px solid var(--ink5);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.emtype{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.06em;color:var(--lime-d);}
+.emmeta{padding:11px 15px;border-bottom:1px solid var(--ink5);}
+.emsub{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.emprev{font-family:'DM Mono',monospace;font-size:10px;color:var(--mist);font-style:italic;}
+.embody{padding:13px 15px;font-size:13px;color:var(--text-d);line-height:1.8;white-space:pre-wrap;}
+::-webkit-scrollbar{width:3px;height:3px;}::-webkit-scrollbar-track{background:var(--ink);}::-webkit-scrollbar-thumb{background:var(--ink5);border-radius:2px;}
+@media(max-width:560px){.fg-2{grid-template-columns:1fr;}.tb{padding:14px 16px;}.cb{padding:16px;}}
+</style>
+</head>
+<body>
+<div class="grid"></div>
+<div class="orbs"><div class="o1"></div><div class="o2"></div></div>
+<div class="z">
+
+<nav>
+  <div class="nav-i">
+    <div class="logo"><div class="logo-dot"></div>Drop<span>Forge</span></div>
+    <div class="nav-user" id="nav-user">
+      <span id="nav-code"></span>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+    <div class="nav-tag" id="nav-tag">AI Store Builder</div>
+  </div>
+</nav>
+
+<!-- ACCESS CODE GATE -->
+<div class="gate" id="gate">
+  <div class="gate-box">
+    <div class="gate-icon">⚡</div>
+    <div class="gate-title">DROP<span>FORGE</span></div>
+    <div class="gate-sub">AI Store Builder</div>
+    <div class="gate-card">
+      <p class="gate-label">Enter your access code to start building stores</p>
+      <div class="code-row">
+        <input class="code-in" id="code-input" type="text" placeholder="FORGE-XXXXXXXX"
+          oninput="this.value=this.value.toUpperCase();document.getElementById('code-err').textContent='';"
+          onkeydown="if(event.key==='Enter')validateCode()"/>
+        <button class="code-go" id="code-go" onclick="validateCode()">GO</button>
+      </div>
+      <div class="code-err" id="code-err"></div>
+      <div class="gate-footer">
+        <p>Don't have an access code?</p>
+        <a class="buy-link" href="https://dropforge.myshopify.com" target="_blank">Get Access — $19/mo →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" style="display:none;">
+  <div class="hero">
+    <div class="eyebrow">AliExpress & Alibaba → Shopify Brand</div>
+    <h1><div>PASTE.</div><div class="a">FORGE.</div><div class="o">SELL.</div></h1>
+    <p class="hero-p">Screenshot the product listing. DropForge reads the images, extracts every detail, and generates your entire Shopify store — product copy, ads, emails, FAQs and more.</p>
+  </div>
+  <div class="steps" id="steps">
+    <div class="si"><div class="sn lit" id="sn1">1</div><div class="sl lit" id="sl1">Upload</div></div>
+    <div class="sd" id="sd1"></div>
+    <div class="si"><div class="sn" id="sn2">2</div><div class="sl" id="sl2">Details</div></div>
+    <div class="sd" id="sd2"></div>
+    <div class="si"><div class="sn" id="sn3">3</div><div class="sl" id="sl3">Forge</div></div>
+    <div class="sd" id="sd3"></div>
+    <div class="si"><div class="sn" id="sn4">4</div><div class="sl" id="sl4">Results</div></div>
+  </div>
+  <div class="wrap">
+    <div class="card" id="card1">
+      <div class="ch">
+        <div class="cn lit">01</div>
+        <div class="ct">Product Info</div>
+        <div class="cs">Screenshot or type the details</div>
+      </div>
+      <div class="cb">
+        <div class="fg"><label>📸 Screenshot Images (drag & drop up to 8)</label></div>
+        <div class="upload-zone" id="upload-zone" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFiles(event)">
+          <input type="file" class="uz-input" id="file-input" accept="image/*" multiple onchange="handleFiles(event)">
+          <span class="uz-icon">📷</span>
+          <div class="uz-title">Drop screenshots here or click to upload</div>
+          <div class="uz-sub">Works with product title, description, bullet point, and spec images</div>
+        </div>
+        <div class="img-previews" id="img-previews"></div>
+        <div class="img-count" id="img-count"></div>
+        <div class="dvd">or type manually</div>
+        <div class="fg">
+          <label>Product URL (optional, for reference)</label>
+          <input type="url" id="p-url" placeholder="https://www.aliexpress.com/item/..."/>
+        </div>
+        <div class="fg">
+          <label>Product Title</label>
+          <input type="text" id="p-title" placeholder="Copy/type the product title"/>
+        </div>
+        <div class="fg">
+          <label>Extra Details (specs, bullet points, features)</label>
+          <textarea id="p-desc" placeholder="Paste any text from the listing..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="card" id="card2">
+      <div class="ch">
+        <div class="cn" id="cn2">02</div>
+        <div class="ct">Store Settings</div>
+      </div>
+      <div class="cb">
+        <div class="fg-2">
+          <div class="fg"><label>Your Selling Price *</label><input type="text" id="p-price" placeholder="e.g. $39.99"/></div>
+          <div class="fg"><label>Target Market</label><input type="text" id="p-market" placeholder="e.g. home office workers"/></div>
+          <div class="fg"><label>Brand Name (optional)</label><input type="text" id="p-brand" placeholder="Leave blank to auto-generate"/></div>
+          <div class="fg"><label>Brand Tone</label>
+            <select id="p-tone">
+              <option value="modern and premium">Modern & Premium</option>
+              <option value="bold and energetic">Bold & Energetic</option>
+              <option value="friendly and approachable">Friendly & Approachable</option>
+              <option value="minimalist and clean">Minimalist & Clean</option>
+              <option value="luxury and exclusive">Luxury & Exclusive</option>
+              <option value="fun and playful">Fun & Playful</option>
+            </select>
+          </div>
+        </div>
+        <div class="tl">What to generate</div>
+        <div class="tr">
+          <button class="tog on" data-v="brand_name">Brand Name</button>
+          <button class="tog on" data-v="product_description">Product Copy</button>
+          <button class="tog on" data-v="landing_page">Landing Page</button>
+          <button class="tog on" data-v="ads">Ad Copy</button>
+          <button class="tog on" data-v="emails">Emails</button>
+          <button class="tog on" data-v="social_bios">Social Bios</button>
+          <button class="tog on" data-v="faq">FAQ</button>
+        </div>
+        <button class="forge-btn" id="forge-btn" onclick="forge()">⚡ FORGE MY STORE</button>
+      </div>
+    </div>
+    <div class="card loading" id="loading">
+      <span class="hammer">🔨</span>
+      <div class="lh">FORGING YOUR STORE</div>
+      <div class="ls">Turning raw product into a real brand...</div>
+      <div class="log">
+        <div class="lg on" id="lg1">Reading images & product data</div>
+        <div class="lg" id="lg2">Building brand identity</div>
+        <div class="lg" id="lg3">Writing product copy</div>
+        <div class="lg" id="lg4">Crafting ad copy</div>
+        <div class="lg" id="lg5">Writing email sequence</div>
+        <div class="lg" id="lg6">Finalizing everything</div>
+      </div>
+    </div>
+    <div class="results" id="results">
+      <div class="rh">
+        <div class="rt">STORE <span>READY</span> ⚡</div>
+        <div class="ra">
+          <button class="rb" onclick="copyAll()">Copy All</button>
+          <button class="rb p" onclick="reset()">New Product</button>
+        </div>
+      </div>
+      <div class="tabs" id="tabs"></div>
+      <div class="tb"><div id="panes"></div></div>
+    </div>
+  </div>
+</div><!-- end #app -->
+
+</div><!-- end .z -->
+
+<script>
+let imgFiles=[], _data=null, _accessCode='';
+
+// Check if already logged in (session)
+window.addEventListener('load', () => {
+  const saved = sessionStorage.getItem('df_code');
+  if(saved) unlockApp(saved);
+});
+
+async function validateCode() {
+  const code = document.getElementById('code-input').value.trim().toUpperCase();
+  if(!code) return;
+  const btn = document.getElementById('code-go');
+  btn.disabled = true;
+  btn.textContent = '...';
+  try {
+    const res = await fetch('/api/validate', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({code})
+    });
+    const data = await res.json();
+    if(data.valid) {
+      sessionStorage.setItem('df_code', code);
+      unlockApp(code);
+    } else {
+      document.getElementById('code-err').textContent = 'Invalid code. Purchase at dropforge.myshopify.com';
+      btn.disabled=false; btn.textContent='GO';
+    }
+  } catch(err) {
+    document.getElementById('code-err').textContent = 'Connection error. Try again.';
+    btn.disabled=false; btn.textContent='GO';
+  }
+}
+
+function unlockApp(code) {
+  _accessCode = code;
+  document.getElementById('gate').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('nav-tag').style.display = 'none';
+  document.getElementById('nav-user').classList.add('show');
+  document.getElementById('nav-code').textContent = code;
+}
+
+function logout() {
+  sessionStorage.removeItem('df_code');
+  _accessCode = '';
+  document.getElementById('gate').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('nav-tag').style.display = 'block';
+  document.getElementById('nav-user').classList.remove('show');
+  document.getElementById('code-input').value = '';
+}
+
+document.querySelectorAll('.tog').forEach(t => t.addEventListener('click', () => t.classList.toggle('on')));
+
+function setStep(n) {
+  for(let i=1;i<=4;i++){
+    const b=document.getElementById('sn'+i),l=document.getElementById('sl'+i);
+    if(i<n){b.className='sn done';b.textContent='✓';l.className='sl done';}
+    else if(i===n){b.className='sn lit';b.textContent=i;l.className='sl lit';}
+    else{b.className='sn';b.textContent=i;l.className='sl';}
+    if(i<4) document.getElementById('sd'+i).className='sd'+(i<n?' done':'');
+  }
+}
+
+function dragOver(e){e.preventDefault();document.getElementById('upload-zone').classList.add('drag');}
+function dragLeave(){document.getElementById('upload-zone').classList.remove('drag');}
+function dropFiles(e){e.preventDefault();dragLeave();handleFilesRaw([...e.dataTransfer.files]);}
+function handleFiles(e){handleFilesRaw([...e.target.files]);}
+function handleFilesRaw(files){
+  imgFiles=[...imgFiles,...files.filter(f=>f.type.startsWith('image/'))].slice(0,8);
+  renderPreviews();
+  if(imgFiles.length>0){document.getElementById('upload-zone').classList.add('has-files');document.getElementById('cn2').className='cn lit';setStep(2);}
+}
+function renderPreviews(){
+  const wrap=document.getElementById('img-previews');
+  wrap.innerHTML='';
+  imgFiles.forEach((f,i)=>{
+    const url=URL.createObjectURL(f);
+    const div=document.createElement('div');
+    div.className='img-prev';
+    div.innerHTML=`<img src="${url}" alt="product"/><button class="img-remove" onclick="removeImg(${i})">✕</button>`;
+    wrap.appendChild(div);
+  });
+  document.getElementById('img-count').textContent=imgFiles.length>0?`${imgFiles.length} image${imgFiles.length>1?'s':''} uploaded`:'';
+}
+function removeImg(i){imgFiles.splice(i,1);renderPreviews();if(imgFiles.length===0)document.getElementById('upload-zone').classList.remove('has-files');}
+function toBase64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(file);});}
+
+let timer;
+function startAnim(){
+  const ids=['lg1','lg2','lg3','lg4','lg5','lg6'];
+  const labels=['Reading images & product data','Building brand identity','Writing product copy','Crafting ad copy','Writing email sequence','Finalizing everything'];
+  let i=0;
+  timer=setInterval(()=>{
+    if(i>0){const p=document.getElementById(ids[i-1]);p.classList.remove('on');p.classList.add('done');p.textContent='✓ '+labels[i-1];}
+    if(i<ids.length){document.getElementById(ids[i]).classList.add('on');i++;}
+    else clearInterval(timer);
+  },2700);
+}
+
+async function forge(){
+  const title=document.getElementById('p-title').value.trim();
+  const desc=document.getElementById('p-desc').value.trim();
+  const price=document.getElementById('p-price').value.trim();
+  if(imgFiles.length===0&&!title&&!desc){alert('Please upload screenshots or paste product details.');return;}
+  if(!price){document.getElementById('p-price').focus();alert('Please enter your selling price.');return;}
+  const toggles=[...document.querySelectorAll('.tog.on')].map(t=>t.dataset.v);
+  if(!toggles.length){alert('Select at least one section to generate.');return;}
+  const market=document.getElementById('p-market').value;
+  const brand=document.getElementById('p-brand').value;
+  const tone=document.getElementById('p-tone').value;
+  const url=document.getElementById('p-url').value;
+  const src=url.toLowerCase().includes('alibaba')?'Alibaba':'AliExpress';
+  document.getElementById('card1').style.display='none';
+  document.getElementById('card2').style.display='none';
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('forge-btn').disabled=true;
+  setStep(3);startAnim();
+  const systemPrompt=`You are an expert ecommerce brand builder. Transform ${src} supplier products into premium branded Shopify stores. Never mention China, suppliers, wholesale, AliExpress or Alibaba.`;
+  const jsonSchema=`{"brand_name":{"name":"Name","tagline":"Tagline","story":"Story"},"product_description":{"branded_name":"Name","short":"Short","long":"Long","bullets":["B1","B2","B3","B4","B5"]},"landing_page":{"headline":"Headline","subheadline":"Sub","hero_body":"Body","problem":"Problem","solution":"Solution","cta_primary":"CTA","cta_secondary":"CTA2","urgency":"Urgency"},"ads":[{"platform":"TikTok/Reels","variation":1,"hook":"Hook","body":"Body","cta":"CTA","hashtags":"#tag1 #tag2 #tag3"},{"platform":"TikTok/Reels","variation":2,"hook":"Hook","body":"Body","cta":"CTA","hashtags":"#tag1 #tag2"},{"platform":"Facebook","variation":3,"hook":"Hook","body":"Body","cta":"CTA","hashtags":""},{"platform":"TikTok/Reels","variation":4,"hook":"Hook","body":"Body","cta":"CTA","hashtags":"#tag1 #tag2"}],"emails":[{"number":1,"type":"Order Confirmation","subject":"Sub","preview":"Prev","body":"Body"},{"number":2,"type":"Day 2 Value","subject":"Sub","preview":"Prev","body":"Body"},{"number":3,"type":"Day 5 Review","subject":"Sub","preview":"Prev","body":"Body"},{"number":4,"type":"Day 14 Upsell","subject":"Sub","preview":"Prev","body":"Body"}],"social_bios":{"tiktok":"Bio","instagram":"Bio","facebook":"Bio","twitter":"Bio"},"faq":[{"q":"Q?","a":"A."},{"q":"Q?","a":"A."},{"q":"Q?","a":"A."},{"q":"Q?","a":"A."},{"q":"Q?","a":"A."},{"q":"Q?","a":"A."}]}`;
+  try{
+    const content=[];
+    if(imgFiles.length>0){
+      for(const f of imgFiles){const b64=await toBase64(f);content.push({type:'image',source:{type:'base64',media_type:f.type||'image/jpeg',data:b64}});}
+      content.push({type:'text',text:`These are screenshots from an ${src} product listing. Extract all visible product information.`});
+    }
+    let parts=[];
+    if(title) parts.push(`PRODUCT TITLE: ${title}`);
+    if(desc) parts.push(`DETAILS: ${desc.slice(0,1500)}`);
+    parts.push(`PRICE: ${price}`,`MARKET: ${market||'general consumers'}`,`BRAND: ${brand||'auto-generate'}`,`TONE: ${tone}`,`SECTIONS: ${toggles.join(', ')}`,`\nReturn ONLY valid JSON matching this schema (only include requested sections):\n${jsonSchema}`);
+    content.push({type:'text',text:parts.join('\n')});
+    const res=await fetch('/api/forge',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({system:systemPrompt,max_tokens:4000,messages:[{role:'user',content}],access_code:_accessCode})
+    });
+    if(!res.ok){const e=await res.json();throw new Error(e.error||'API '+res.status);}
+    const data=await res.json();
+    if(!data.content) throw new Error('No response');
+    const raw=data.content.map(i=>i.text||'').join('');
+    let result;
+    try{result=JSON.parse(raw.replace(/```json|```/g,'').trim());}
+    catch{const m=raw.match(/\{[\s\S]*\}/);if(m)result=JSON.parse(m[0]);else throw new Error('JSON parse failed');}
+    clearInterval(timer);_data=result;render(result,toggles);
+  }catch(err){
+    clearInterval(timer);
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('card1').style.display='block';
+    document.getElementById('card2').style.display='block';
+    document.getElementById('forge-btn').disabled=false;
+    setStep(imgFiles.length>0?2:1);
+    alert('Generation failed.\n\nError: '+err.message);
+  }
+}
+
+const tNames={brand_name:'Brand',product_description:'Product',landing_page:'Landing',ads:'Ads',emails:'Emails',social_bios:'Bios',faq:'FAQ'};
+function render(data,toggles){
+  const te=document.getElementById('tabs'),pe=document.getElementById('panes');
+  te.innerHTML='';pe.innerHTML='';
+  let first=true;
+  toggles.forEach(k=>{
+    if(!data[k])return;
+    const t=document.createElement('button');
+    t.className='tab'+(first?' on':'');t.textContent=tNames[k]||k;t.dataset.k=k;
+    t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.dataset.k===k));document.querySelectorAll('.pane').forEach(x=>x.classList.toggle('show',x.id==='p-'+k));};
+    te.appendChild(t);
+    const p=document.createElement('div');
+    p.className='pane'+(first?' show':'');p.id='p-'+k;
+    p.innerHTML=bp(k,data[k]);
+    pe.appendChild(p);
+    first=false;
+  });
+  document.getElementById('loading').classList.remove('show');
+  document.getElementById('results').classList.add('show');
+  setStep(4);
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function bp(k,d){
+  if(k==='brand_name')return blk('Brand Name',`<div class="obb xl">${d.name}</div>`,d.name,true)+blk('Tagline',d.tagline,d.tagline,false,'lg')+blk('Brand Story',d.story,d.story);
+  if(k==='product_description')return blk('Branded Name',d.branded_name,d.branded_name,false,'lg')+blk('Short Description',d.short,d.short)+blk('Full Description',d.long,d.long)+blk('Bullet Points',d.bullets.map(b=>`• ${b}`).join('\n'),d.bullets.map(b=>`• ${b}`).join('\n'));
+  if(k==='landing_page')return blk('Hero Headline',d.headline,d.headline,false,'lg')+blk('Sub-Headline',d.subheadline,d.subheadline)+blk('Hero Body',d.hero_body,d.hero_body)+blk('Problem',d.problem,d.problem)+blk('Solution',d.solution,d.solution)+blk('CTAs',`Primary: ${d.cta_primary}\nSecondary: ${d.cta_secondary}`,`Primary: ${d.cta_primary}\nSecondary: ${d.cta_secondary}`)+blk('Urgency',d.urgency,d.urgency,false,'hot');
+  if(k==='ads')return d.map(a=>`<div class="adc"><div class="adtop"><div class="adp">${a.platform}</div><div class="adv">V${a.variation}</div></div><div class="af"><div class="afl">Hook</div><div class="afv hk">${a.hook}</div></div><div class="af"><div class="afl">Body</div><div class="afv">${a.body}</div></div><div class="af"><div class="afl">CTA</div><div class="afv">${a.cta}</div></div>${a.hashtags?`<div class="af"><div class="afl">Hashtags</div><div class="afv tg">${a.hashtags}</div></div>`:''}<button class="cp" style="width:100%;margin-top:9px;padding:7px;" onclick="cp(this,\`HOOK: ${e(a.hook)}\n\nBODY: ${e(a.body)}\n\nCTA: ${e(a.cta)}\n\nHASHTAGS: ${e(a.hashtags)}\`)">Copy Full Ad</button></div>`).join('');
+  if(k==='emails')return d.map(x=>`<div class="emc"><div class="emtop"><div class="emtype">Email ${x.number} — ${x.type}</div><button class="cp" onclick="cp(this,\`SUBJECT: ${e(x.subject)}\nPREVIEW: ${e(x.preview)}\n\n${e(x.body)}\`)">Copy</button></div><div class="emmeta"><div class="emsub">${x.subject}</div><div class="emprev">${x.preview}</div></div><div class="embody">${x.body}</div></div>`).join('');
+  if(k==='social_bios')return blk('TikTok',d.tiktok,d.tiktok)+blk('Instagram',d.instagram,d.instagram)+blk('Facebook',d.facebook,d.facebook)+blk('Twitter/X',d.twitter,d.twitter);
+  if(k==='faq')return d.map((f,i)=>blk(`Q${i+1}: ${f.q}`,f.a,f.a)).join('');
+  return '';
+}
+function blk(l,html,ct,raw=false,cls=''){
+  const body=raw?html:`<div class="obb ${cls}">${html}</div>`;
+  return `<div class="ob"><div class="obh"><div class="obl">${l}</div>${ct?`<button class="cp" onclick="cp(this,\`${e(ct)}\`)">Copy</button>`:''}</div>${body}</div>`;
+}
+function e(s){return(s||'').replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');}
+function cp(btn,text){navigator.clipboard.writeText(text).then(()=>{const o=btn.textContent;btn.textContent='✓ Copied';btn.classList.add('ok');setTimeout(()=>{btn.textContent=o;btn.classList.remove('ok');},2000);});}
+function copyAll(){if(!_data)return;navigator.clipboard.writeText(JSON.stringify(_data,null,2)).then(()=>{const b=document.querySelector('.rb:not(.p)');if(b){b.textContent='✓ Copied';setTimeout(()=>b.textContent='Copy All',2000);}});}
+function reset(){
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('loading').classList.remove('show');
+  ['card1','card2'].forEach(id=>document.getElementById(id).style.display='block');
+  document.getElementById('forge-btn').disabled=false;
+  ['p-url','p-title','p-desc','p-price','p-market','p-brand'].forEach(id=>document.getElementById(id).value='');
+  imgFiles=[];renderPreviews();
+  document.getElementById('upload-zone').classList.remove('has-files');
+  document.getElementById('cn2').className='cn';
+  const labels=['Reading images & product data','Building brand identity','Writing product copy','Crafting ad copy','Writing email sequence','Finalizing everything'];
+  ['lg1','lg2','lg3','lg4','lg5','lg6'].forEach((id,i)=>{const el=document.getElementById(id);el.className='lg'+(i===0?' on':'');el.textContent=labels[i];});
+  setStep(1);window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
